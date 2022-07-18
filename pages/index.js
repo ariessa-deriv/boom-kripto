@@ -1,9 +1,13 @@
-import Head from "next/head";
-import Image from "next/image";
-import styles from "../styles/Home.module.css";
-import Login from "./Login";
-import Signup from "./Signup";
+import Dashboard from "./Dashboard";
+import NavBar from "./NavBar";
+import Watchlist from "./Watchlist";
 
 export default function Home() {
-  return <Login />;
+  return (
+    <div>
+      <NavBar />
+      {/* <Dashboard /> */}
+      <Watchlist />
+    </div>
+  );
 }
