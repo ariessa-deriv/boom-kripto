@@ -1,41 +1,91 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import fire from "./fire";
+import Loginn from "./login1";
+// import "../styles/globals.css";
 const Login = () => {
+  const [user, setUser] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [hasAccount, setHasAccount] = useState(false);
+
+  const clearInputs = () => {
+    setEmailError("");
+    setPassword("");
+  };
+
+  const handleLogin = () => {
+    clearErrors();
+    fire
+      .auth()
+      .signInWithEmailAndPassword(email, password)
+      .catch((err) => {
+        switch (err.code) {
+          case "auth/invalid-email":
+          case "auth/user-disable":
+          case "auth/user-not-found":
+            SetEmailError(err.message);
+            break;
+          case "auth/wrong-password":
+            setPasswordError(err.message);
+            break;
+        }
+      });
+  };
+
+  const handleSignup = () => {
+    clearErrors();
+    fire
+      .auth()
+      .createUserWithEmailAndPassword(email, password)
+      .catch((err) => {
+        switch (err.code) {
+          case "auth/email-already-in-use":
+          case "auth/invalid-email":
+            SetEmailError(err.message);
+            break;
+          case "auth/wrong-password":
+            setPasswordError(err.message);
+            break;
+        }
+      });
+  };
+
+  const handLogout = () => {
+    fire.auth().signOut();
+  };
+
+  const authListener = () => {
+    fire.auth().onAuthStateChanged((user) => {
+      if (user) {
+        clearInputs();
+        setUser(user);
+      } else {
+        setUser("");
+      }
+    });
+  };
+
+  useEffect(() => {
+    authListener();
+  }, []);
+
   return (
-    <>
-      <label for="my-modal-3" class="btn modal-button">
-        Login
-      </label>
-      <input type="checkbox" id="my-modal-3" class="modal-toggle" />
-      <div class="modal">
-        <div class="modal-box relative">
-          <label
-            for="my-modal-3"
-            class="btn btn-sm btn-circle absolute right-2 top-2"
-          >
-            ✕
-          </label>
-          <h1 class="text-5xl pt-4 font-bold">Login</h1>
-
-          <h3 class="text-lg pt-20 font-bold">Email Address</h3>
-
-          <input
-            type="text"
-            placeholder="Enter email"
-            class="input input-bordered input-primary w-full max-w-xs"
-          />
-
-          <h3 class="text-lg pt-8 font-bold">Password</h3>
-
-          <input
-            type="text"
-            placeholder="Enter password"
-            class="input input-bordered input-primary w-full max-w-xs"
-          />
-          <button class="btn">Login</button>
-        </div>
-      </div>
-    </>
+    <div className="Login">
+      <Login
+        email={email}
+        setEmail={setEmail}
+        password={password}
+        setPassword={setPassword}
+        handleLogin={handleLogin}
+        handleSignup={handleSignup}
+        hasAccount={hasAccount}
+        setHasAccount={setHasAccount}
+        emailError={emailError}
+        passwordError={passwordError}
+      />
+    </div>
   );
 };
 
