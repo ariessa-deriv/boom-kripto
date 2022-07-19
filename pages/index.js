@@ -1,13 +1,13 @@
 import Dashboard from "./Dashboard";
-import NavBar from "./NavBar";
-import Watchlist from "./Watchlist";
+import NavBar from "../components/NavBar";
 
 export default function Home() {
   return (
     <div>
       <NavBar />
-      {/* <Dashboard /> */}
-      <Watchlist />
+
+      <Dashboard />
+      {/* <Watchlist /> */}
     </div>
   );
 }
