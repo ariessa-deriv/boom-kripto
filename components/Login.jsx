@@ -10,11 +10,7 @@ import { auth } from "./helpers/firebaseConfig";
 const Login = ({ showLoginModal, setShowLoginModal }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [emailError, setEmailError] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState("");
-  const [hasAccount, setHasAccount] = React.useState(false);
-
-  const { coin_store, watchlist_store, user_store } = useStores();
+  const { user_store } = useStores();
 
   const clearInputs = () => {
     setEmailError("");

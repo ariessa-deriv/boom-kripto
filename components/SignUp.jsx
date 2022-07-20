@@ -4,17 +4,11 @@ import { XIcon } from "@heroicons/react/outline";
 import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
-import { firebaseApp } from "./helpers/firebaseConfig";
 
 const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
-  // const [user, setUser] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
-  const [emailError, setEmailError] = React.useState("");
-  const [passwordError, setPasswordError] = React.useState("");
-  const [hasAccount, setHasAccount] = React.useState(false);
-
-  const { coin_store, watchlist_store } = useStores();
+  const { user_store } = useStores();
 
   const clearInputs = () => {
     setEmailError("");
