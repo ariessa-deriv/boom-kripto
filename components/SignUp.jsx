@@ -22,11 +22,10 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
   };
 
   const handleSignup = () => {
-    const authentication = getAuth(firebaseApp);
-    createUserWithEmailAndPassword(authentication, email, password)
+    createUserWithEmailAndPassword(auth, email, password)
       .then((response) => {
-        // Add toast: account has been created
         setShowSignUpModal(!showSignUpModal);
+        // Add toast: account has been created
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {

@@ -8,7 +8,7 @@ import SignUp from "./SignUp";
 import { getAuth, signOut } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
-import { firebaseApp } from "./helpers/firebaseConfig";
+import { auth } from "./helpers/firebaseConfig";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
@@ -26,13 +26,11 @@ const NavBar = () => {
 
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const [showSignUpModal, setShowSignUpModal] = React.useState(false);
-  // const [user, setUser] = React.useState("");
 
   const { coin_store, watchlist_store, user_store } = useStores();
 
   const handleLogout = () => {
-    const authentication = getAuth(firebaseApp);
-    signOut(authentication)
+    signOut(auth)
       .then((response) => {
         // Add toast: account has been logged out
         user_store.setUser("");
@@ -144,15 +142,11 @@ const NavBar = () => {
           <Login
             showLoginModal={showLoginModal}
             setShowLoginModal={setShowLoginModal}
-            // user={user}
-            // setUser={setUser}
           />
 
           <SignUp
             showSignUpModal={showSignUpModal}
             setShowSignUpModal={setShowSignUpModal}
-            // user={user}
-            // setUser={setUser}
           />
         </>
       )}
