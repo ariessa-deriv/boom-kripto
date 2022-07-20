@@ -17,6 +17,7 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
         setShowSignUpModal(!showSignUpModal);
         // Add toast: account has been created
         setNotificationModal(true);
+        user_store.user = auth.currentUser;
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {

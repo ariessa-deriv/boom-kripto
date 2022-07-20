@@ -36,20 +36,19 @@ const NavBar = () => {
   const handleLogout = () => {
     signOut(auth)
       .then((response) => {
-        // Add toast: account has been logged out
         user_store.setUser(auth.currentUser);
         console.log("log out");
         console.log("user_Store user ", user_store.user);
+        // Add toast: account has been logged out
       })
       .catch((error) => {});
     console.log("user inside handlelogout ", user_store.user);
   };
 
   console.log("user", user_store.user);
-  // console.log("user check", user !== "");
+
   React.useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      // setCurrentUser(user);
       user_store.setUser(user);
       console.log("useeffect current user: ", auth.currentUser);
     });
@@ -162,6 +161,10 @@ const NavBar = () => {
             showNotificationModal={showNotificationModal}
             setShowNotificationModal={setShowNotificationModal}
           />
+          {/* <Notification
+            showNotificationModal={showNotificationModal}
+            setShowNotificationModal={setShowNotificationModal}
+          /> */}
         </>
       )}
     </Disclosure>

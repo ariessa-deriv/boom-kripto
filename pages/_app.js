@@ -11,7 +11,6 @@ function MyApp({ Component, pageProps }) {
 
   React.useEffect(() => {
     onAuthStateChanged(auth, (user) => {
-      // setCurrentUser(user);
       user_store.setUser(user);
     });
   }, [user_store.user]);
