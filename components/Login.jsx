@@ -23,9 +23,11 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
         console.log(error.code);
         if (error.code === "auth/wrong-password") {
           // TODO: Add toast wrong password, please check the password
+          // user_store.errorState("error");
         }
         if (error.code === "auth/user-not-found") {
           // TODO: Add toast user not found, please check the email
+          // user_store.errorState("error");
         }
       });
   };

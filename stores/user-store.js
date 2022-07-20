@@ -7,6 +7,7 @@ export default class UserStore {
 
   user = observable("");
   authenticationState = observable("");
+  errorState = observable("");
 
   setUser = (user) => {
     this.user = user;
@@ -14,5 +15,9 @@ export default class UserStore {
 
   setAuthenticationState = (authenticationState) => {
     this.authenticationState = authenticationState;
+  };
+
+  setError = (errorState) => {
+    this.errorState = errorState;
   };
 }

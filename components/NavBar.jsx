@@ -11,6 +11,7 @@ import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
 import { auth } from "./helpers/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
+import { XCircleIcon } from "@heroicons/react/solid";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
@@ -33,6 +34,7 @@ const NavBar = () => {
   const [notificationTitle, setNotificationTitle] = React.useState("");
   const [notificationDescription, setNotificationDescription] =
     React.useState("");
+  const [notificationType, setNotificationType] = React.useState("");
 
   const { user_store } = useStores();
 
@@ -42,6 +44,7 @@ const NavBar = () => {
         user_store.setUser(auth.currentUser);
         setNotificationTitle("Successfully logged out!");
         setNotificationDescription("You are now logged out.");
+        setNotificationType("message");
         setShowNotificationModal(true);
       })
       .catch((error) => {});
@@ -57,15 +60,29 @@ const NavBar = () => {
     if (user_store.authenticationState == "login") {
       setNotificationTitle("Successfully logged in!");
       setNotificationDescription("You are now logged in.");
+      setNotificationType("message");
       setShowNotificationModal(true);
+      user_store.setAuthenticationState("");
     }
 
     if (user_store.authenticationState == "signup") {
       setNotificationTitle("Successfully signed up!");
       setNotificationDescription("Welcome to BoomKripto, anon.");
+      setNotificationType("message");
       setShowNotificationModal(true);
+      user_store.setAuthenticationState("");
     }
   }, [user_store.authenticationState]);
+
+  React.useEffect(() => {
+    if (user_store.errorState == "error") {
+      setNotificationTitle("Successfully logged in!");
+      setNotificationDescription("You are now logged in.");
+      setNotificationType("message");
+      setShowNotificationModal(true);
+      user_store.setAuthenticationState("");
+    }
+  }, [user_store.errorState]);
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
@@ -174,6 +191,7 @@ const NavBar = () => {
             setShowNotificationModal={setShowNotificationModal}
             notificationTitle={notificationTitle}
             notificationDescription={notificationDescription}
+            notificationType={notificationType}
           />
         </>
       )}
