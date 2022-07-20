@@ -8,7 +8,7 @@ import { observer } from "mobx-react-lite";
 const Dashboard = () => {
   const { coin_store, watchlist_store } = useStores();
   const coinslist =
-    "bitcoin,ethereum,tether,usd-coin,binancecoin,binance-usd,ripple,cardano,solana,dogecoin,polkadot,matic-network,shiba-inu,dai,avalanche-2,tron,lido-staked-ether-wormhole,wrapped-bitcoin,leo-token,litecoin,ftx-token,okb,uniswap,crypto-com-chain,chainlink,ethereum-classic,near,stellar,cosmos,monero";
+    "bitcoin,ethereum,tether,usd-coin,binancecoin,binance-usd,ripple,cardano,solana,dogecoin,polkadot,matic-network,shiba-inu,dai,avalanche-2,tron,staked-ether,wrapped-bitcoin,leo-token,litecoin,ftx-token,okb,uniswap,crypto-com-chain,chainlink,ethereum-classic,near,stellar,cosmos,monero,algorand,bitcoin-cash,flow,vechain,chain-2,apecoin,theta-fuel,internet-computer,the-sandbox,decentraland,hedera-hashgraph,tezos,filecoin,quant-network,axie-infinity,frax,elrond-erd-2,aave,theta-token,defichain";
 
   React.useEffect(() => {
     axios
