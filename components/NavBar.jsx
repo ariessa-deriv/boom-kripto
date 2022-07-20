@@ -27,12 +27,8 @@ const NavBar = () => {
 
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const [showSignUpModal, setShowSignUpModal] = React.useState(false);
-<<<<<<< HEAD
-=======
   const [showNotificationModal, setShowNotificationModal] =
     React.useState(false);
-  // const [user, setUser] = React.useState("");
->>>>>>> 0c889b502a5408d69a3f8110b5ff1ce04645ec71
 
   const { coin_store, watchlist_store, user_store } = useStores();
 

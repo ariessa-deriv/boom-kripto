@@ -5,6 +5,7 @@ import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
 import { firebaseApp } from "./helpers/firebaseConfig";
+import { auth } from "./helpers/firebaseConfig";
 
 const Login = ({ showLoginModal, setShowLoginModal }) => {
   const [email, setEmail] = React.useState("");
@@ -21,8 +22,7 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
   };
 
   const handleLogin = () => {
-    const authentication = getAuth(firebaseApp);
-    signInWithEmailAndPassword(authentication, email, password)
+    signInWithEmailAndPassword(auth, email, password)
       .then((response) => {
         // console.log(authentication.currentUser);
         user_store.setUser(authentication.currentUser);

@@ -25,11 +25,8 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
     createUserWithEmailAndPassword(auth, email, password)
       .then((response) => {
         setShowSignUpModal(!showSignUpModal);
-<<<<<<< HEAD
         // Add toast: account has been created
-=======
         setNotificationModal(true);
->>>>>>> 0c889b502a5408d69a3f8110b5ff1ce04645ec71
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {

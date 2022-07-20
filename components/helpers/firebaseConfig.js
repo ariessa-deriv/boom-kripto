@@ -1,4 +1,20 @@
 import { initializeApp } from "firebase/app";
+import { getAuth } from "firebase/auth";
+import {
+  getFirestore,
+  query,
+  orderBy,
+  onSnapshot,
+  collection,
+  getDoc,
+  getDocs,
+  setDoc,
+  addDoc,
+  updateDoc,
+  doc,
+  serverTimestamp,
+  arrayUnion,
+} from "firebase/firestore";
 
 const firebaseConfig = {
   apiKey: "AIzaSyDzhbBrA6oYlSLWQrkIKNbjzKoCbcYQj3M",
@@ -10,4 +26,8 @@ const firebaseConfig = {
   measurementId: "G-PZ374FK9FQ",
 };
 
-export const firebaseApp = initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
+const auth = getAuth(firebaseApp);
+const firestoreDatabase = getFirestore(firebaseApp);
+
+export { auth, firestoreDatabase };
