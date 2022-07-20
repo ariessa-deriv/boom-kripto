@@ -6,10 +6,11 @@ import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Login from "./Login";
 import SignUp from "./SignUp";
 import Notification from "./Notification";
-import { getAuth, signOut } from "firebase/auth";
+import { signOut } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
 import { auth } from "./helpers/firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
@@ -36,14 +37,23 @@ const NavBar = () => {
     signOut(auth)
       .then((response) => {
         // Add toast: account has been logged out
-        user_store.setUser("");
-        // console.log("log out");
+        user_store.setUser(auth.currentUser);
+        console.log("log out");
+        console.log("user_Store user ", user_store.user);
       })
       .catch((error) => {});
+    console.log("user inside handlelogout ", user_store.user);
   };
 
   console.log("user", user_store.user);
   // console.log("user check", user !== "");
+  React.useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      // setCurrentUser(user);
+      user_store.setUser(user);
+      console.log("useeffect current user: ", auth.currentUser);
+    });
+  }, [auth.currentUser]);
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
@@ -85,7 +95,7 @@ const NavBar = () => {
                   ))}
                 </div>
               </div>
-              {user_store.user === "" ? (
+              {!auth.currentUser ? (
                 <div className="flex items-center">
                   <div className="flex-shrink-0 pr-2">
                     <button
