@@ -7,11 +7,14 @@ import { observer } from "mobx-react-lite";
 
 const Dashboard = () => {
   const { coin_store, watchlist_store } = useStores();
+  const coinslist =
+    "bitcoin,ethereum,tether,usd-coin,binancecoin,binance-usd,ripple,cardano,solana,dogecoin,polkadot,matic-network,shiba-inu,dai,avalanche-2,tron,lido-staked-ether-wormhole,wrapped-bitcoin,leo-token,litecoin,ftx-token,okb,uniswap,crypto-com-chain,chainlink,ethereum-classic,near,stellar,cosmos,monero";
 
   React.useEffect(() => {
     axios
       .get(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,tether,usd-coin,binancecoin,binance-usd,ripple,cardano,solana,dogecoin,polkadot,matic-network,shiba-inu,dai,avalanche-2,tron,lido-staked-ether-wormhole,wrapped-bitcoin,leo-token,litecoin,ftx-token,okb,uniswap,crypto-com-chain,chainlink,ethereum-classic,near,stellar,cosmos,monero"
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" +
+          coinslist
       )
       .then((res) => {
         coin_store.setCoins(res.data);
