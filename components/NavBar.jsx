@@ -34,31 +34,38 @@ const NavBar = () => {
   const [notificationDescription, setNotificationDescription] =
     React.useState("");
 
-  const { coin_store, watchlist_store, user_store } = useStores();
+  const { user_store } = useStores();
 
   const handleLogout = () => {
     signOut(auth)
       .then((response) => {
         user_store.setUser(auth.currentUser);
-        console.log("log out");
-        console.log("user_Store user ", user_store.user);
-        // Add toast: account has been logged out
         setNotificationTitle("Successfully logged out!");
         setNotificationDescription("You are now logged out.");
         setShowNotificationModal(true);
       })
       .catch((error) => {});
-    console.log("user inside handlelogout ", user_store.user);
   };
-
-  console.log("user", user_store.user);
 
   React.useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       user_store.setUser(user);
-      console.log("useeffect current user: ", auth.currentUser);
     });
   }, [auth.currentUser]);
+
+  React.useEffect(() => {
+    if (user_store.authenticationState == "login") {
+      setNotificationTitle("Successfully logged in!");
+      setNotificationDescription("You are now logged in.");
+      setShowNotificationModal(true);
+    }
+
+    if (user_store.authenticationState == "signup") {
+      setNotificationTitle("Successfully signed up!");
+      setNotificationDescription("Welcome to BoomKripto, anon.");
+      setShowNotificationModal(true);
+    }
+  }, [user_store.authenticationState]);
 
   return (
     <Disclosure as="nav" className="bg-white shadow">
@@ -82,7 +89,6 @@ const NavBar = () => {
                   <p className="normal-case text-xl font-bold">BoomKripto</p>
                 </div>
                 <div className="hidden md:ml-6 md:flex md:space-x-8">
-                  {/* Current: "border-indigo-500 text-gray-900", Default: "border-transparent text-gray-500 hover:border-gray-300 hover:text-gray-700" */}
                   {navigation.map((item) => (
                     <Link key={item.name} href={item.href}>
                       <a
