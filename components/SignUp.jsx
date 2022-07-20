@@ -27,11 +27,13 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
       .then((response) => {
         // Add toast: account has been created
         setShowSignUpModal(!showSignUpModal);
+        setNotificationModal(true);
       })
       .catch((error) => {
         if (error.code === "auth/email-already-in-use") {
           // Add toast: account already in use
           console.log("Email Already in Use");
+          setNotificationModal(true);
         }
       });
   };
@@ -127,7 +129,7 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
                           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
                           onClick={() => handleSignup()}
                         >
-                          Sign Up
+                          Sign up
                         </button>
                       </div>
                     </div>
