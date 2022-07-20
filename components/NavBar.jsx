@@ -30,6 +30,9 @@ const NavBar = () => {
   const [showSignUpModal, setShowSignUpModal] = React.useState(false);
   const [showNotificationModal, setShowNotificationModal] =
     React.useState(false);
+  const [notificationTitle, setNotificationTitle] = React.useState("");
+  const [notificationDescription, setNotificationDescription] =
+    React.useState("");
 
   const { coin_store, watchlist_store, user_store } = useStores();
 
@@ -40,6 +43,9 @@ const NavBar = () => {
         console.log("log out");
         console.log("user_Store user ", user_store.user);
         // Add toast: account has been logged out
+        setNotificationTitle("Successfully logged out!");
+        setNotificationDescription("You are now logged out.");
+        setShowNotificationModal(true);
       })
       .catch((error) => {});
     console.log("user inside handlelogout ", user_store.user);
@@ -160,11 +166,9 @@ const NavBar = () => {
           <Notification
             showNotificationModal={showNotificationModal}
             setShowNotificationModal={setShowNotificationModal}
+            notificationTitle={notificationTitle}
+            notificationDescription={notificationDescription}
           />
-          {/* <Notification
-            showNotificationModal={showNotificationModal}
-            setShowNotificationModal={setShowNotificationModal}
-          /> */}
         </>
       )}
     </Disclosure>
