@@ -5,6 +5,7 @@ import { Disclosure } from "@headlessui/react";
 import { MenuIcon, XIcon } from "@heroicons/react/outline";
 import Login from "./Login";
 import SignUp from "./SignUp";
+import Notification from "./Notification";
 import { getAuth, signOut } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
@@ -26,6 +27,12 @@ const NavBar = () => {
 
   const [showLoginModal, setShowLoginModal] = React.useState(false);
   const [showSignUpModal, setShowSignUpModal] = React.useState(false);
+<<<<<<< HEAD
+=======
+  const [showNotificationModal, setShowNotificationModal] =
+    React.useState(false);
+  // const [user, setUser] = React.useState("");
+>>>>>>> 0c889b502a5408d69a3f8110b5ff1ce04645ec71
 
   const { coin_store, watchlist_store, user_store } = useStores();
 
@@ -118,7 +125,6 @@ const NavBar = () => {
               )}
             </div>
           </div>
-
           <Disclosure.Panel className="md:hidden">
             <div className="pt-2 pb-3 space-y-1">
               {navigation.map((item) => (
@@ -138,15 +144,17 @@ const NavBar = () => {
               ))}
             </div>
           </Disclosure.Panel>
-
           <Login
             showLoginModal={showLoginModal}
             setShowLoginModal={setShowLoginModal}
           />
-
           <SignUp
             showSignUpModal={showSignUpModal}
             setShowSignUpModal={setShowSignUpModal}
+          />
+          <Notification
+            showNotificationModal={showNotificationModal}
+            setShowNotificationModal={setShowNotificationModal}
           />
         </>
       )}
