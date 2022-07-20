@@ -5,11 +5,24 @@ import { observer } from "mobx-react-lite";
 const SearchBar = () => {
   const { coin_store, watchlist_store } = useStores();
   const searchInput = React.useRef(null);
+  const [filter, setFilter] = React.useState("");
 
-  const handleChange = () => {
+  const handleChange = (e) => {
     const inputValue = searchInput.current.value;
-    coin_store.setSearch(inputValue);
+    coin_store.setSearch(e.target.value);
+    setFilter(e.target.value);
     console.log("searchInput: ", coin_store.search);
+    const filterCoins = coin_store.coins.filter((c) =>
+      c.name.toLowerCase().includes(coin_store.search)
+    );
+
+    if (filterCoins) {
+      coin_store.setFilteredCoins(coin_store.coins);
+      console.log("filteredCoins: ", coin_store.filteredCoins);
+    } else {
+      coin_store.setFilteredCoins(filterCoins);
+      console.log("filteredCoins: ", coin_store.filteredCoins);
+    }
   };
 
   return (
@@ -37,6 +50,7 @@ const SearchBar = () => {
           ref={searchInput}
           onChange={handleChange}
           id="coin-search"
+          value={filter}
           className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
           placeholder="Search for a coin..."
         />

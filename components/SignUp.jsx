@@ -1,47 +1,44 @@
 import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
 import { firebaseApp } from "./helpers/firebaseConfig";
 
-const Login = ({ showLoginModal, setShowLoginModal }) => {
+const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
+  // const [user, setUser] = React.useState("");
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [emailError, setEmailError] = React.useState("");
   const [passwordError, setPasswordError] = React.useState("");
   const [hasAccount, setHasAccount] = React.useState(false);
 
-  const { coin_store, watchlist_store, user_store } = useStores();
+  const { coin_store, watchlist_store } = useStores();
 
   const clearInputs = () => {
     setEmailError("");
     setPassword("");
   };
 
-  const handleLogin = () => {
+  const handleSignup = () => {
     const authentication = getAuth(firebaseApp);
-    signInWithEmailAndPassword(authentication, email, password)
+    createUserWithEmailAndPassword(authentication, email, password)
       .then((response) => {
-        // console.log(authentication.currentUser);
-        user_store.setUser(authentication.currentUser);
-        setShowLoginModal(!showLoginModal);
+        // Add toast: account has been created
+        setShowSignUpModal(!showSignUpModal);
       })
       .catch((error) => {
-        console.log(error.code);
-        if (error.code === "auth/wrong-password") {
-          // toast.error("Please check the Password");
-        }
-        if (error.code === "auth/user-not-found") {
-          // toast.error("Please check the Email");
+        if (error.code === "auth/email-already-in-use") {
+          // Add toast: account already in use
+          console.log("Email Already in Use");
         }
       });
   };
 
   return (
-    <Transition.Root show={showLoginModal} as={Fragment}>
-      <Dialog as="div" className="relative z-10" onClose={setShowLoginModal}>
+    <Transition.Root show={showSignUpModal} as={Fragment}>
+      <Dialog as="div" className="relative z-10" onClose={setShowSignUpModal}>
         <Transition.Child
           as={Fragment}
           enter="ease-out duration-300"
@@ -70,7 +67,7 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
                   <button
                     type="button"
                     className="bg-white rounded-md text-gray-400 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                    onClick={() => setShowLoginModal(false)}
+                    onClick={() => setShowSignUpModal(false)}
                   >
                     <span className="sr-only">Close</span>
                     <XIcon className="h-6 w-6" aria-hidden="true" />
@@ -79,7 +76,7 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
                 <div className="sm:flex sm:items-center flex flex-col justify-center">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
                     <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
-                      Login
+                      Sign Up
                     </h2>
                     <div className="mt-10 mb-10 space-y-6">
                       <div>
@@ -128,9 +125,9 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
                         <button
                           type="submit"
                           className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                          onClick={() => handleLogin()}
+                          onClick={() => handleSignup()}
                         >
-                          Login
+                          Sign Up
                         </button>
                       </div>
                     </div>
@@ -145,4 +142,4 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
   );
 };
 
-export default observer(Login);
+export default observer(SignUp);

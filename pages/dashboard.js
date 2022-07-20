@@ -11,7 +11,7 @@ const Dashboard = () => {
   React.useEffect(() => {
     axios
       .get(
-        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&order=market_cap_desc&per_page=30&page=1&sparkline=false"
+        "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=bitcoin,ethereum,tether,usd-coin,binancecoin,binance-usd,ripple,cardano,solana,dogecoin,polkadot,matic-network,shiba-inu,dai,avalanche-2,tron,lido-staked-ether-wormhole,wrapped-bitcoin,leo-token,litecoin,ftx-token,okb,uniswap,crypto-com-chain,chainlink,ethereum-classic,near,stellar,cosmos,monero"
       )
       .then((res) => {
         coin_store.setCoins(res.data);
@@ -25,10 +25,10 @@ const Dashboard = () => {
       <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 tracking-normal font-sans text-8xl font-bold text-center pt-24">
         Dashboard
       </p>
-      <p className="tracking-normal text-2xl font-sans font-normal text-center pt-12">
-        Track prices of 50 cryptocurrencies
+      <p className="tracking-normal text-2xl font-sans font-normal text-center pt-10">
+        Track prices of 30 cryptocurrencies
       </p>
-      <SearchBar />
+      {/* <SearchBar /> */}
       <Table />
     </div>
   );

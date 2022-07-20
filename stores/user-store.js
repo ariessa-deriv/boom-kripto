@@ -1,13 +1,13 @@
 import { action, observable } from "mobx";
 
-export default class CoinStore {
+export default class UserStore {
   constructor(root_store) {
     this.root_store = root_store;
   }
 
-  coins = observable([]);
+  user = observable("");
 
-  setCoins = (coins) => {
-    this.coins = coins;
+  setUser = (user) => {
+    this.user = user;
   };
 }
