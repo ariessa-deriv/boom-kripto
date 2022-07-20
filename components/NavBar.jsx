@@ -40,6 +40,7 @@ const NavBar = () => {
         console.log("log out");
         console.log("user_Store user ", user_store.user);
         // Add toast: account has been logged out
+        setShowNotificationModal(true);
       })
       .catch((error) => {});
     console.log("user inside handlelogout ", user_store.user);
