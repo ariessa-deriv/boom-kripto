@@ -15,12 +15,9 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((response) => {
-        console.log(auth.currentUser);
         user_store.setUser(auth.currentUser);
-        console.log("user store login user: ", user_store.user);
+        user_store.setAuthenticationState("login");
         setShowLoginModal(!showLoginModal);
-
-        // TODO: Add toast sign in successful
       })
       .catch((error) => {
         console.log(error.code);
