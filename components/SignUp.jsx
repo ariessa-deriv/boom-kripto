@@ -1,7 +1,8 @@
 import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
+import { createUserWithEmailAndPassword } from "firebase/auth";
+import { auth } from "./helpers/firebaseConfig";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
 
@@ -9,11 +10,6 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
   const [email, setEmail] = React.useState("");
   const [password, setPassword] = React.useState("");
   const { user_store } = useStores();
-
-  const clearInputs = () => {
-    setEmailError("");
-    setPassword("");
-  };
 
   const handleSignup = () => {
     createUserWithEmailAndPassword(auth, email, password)

@@ -32,10 +32,10 @@ const Watchlist = () => {
     coin.name.toLowerCase().includes(search.toLowerCase())
   );
 
+  // Create new watchlist
   const createWatchlist = () => {
     const userId = user_store.user.uid;
-    // const userEmail = user_store.user.email;
-    // console.log("userID, ", userId);
+    const userEmail = user_store.user.email;
 
     setDoc(doc(firestoreDatabase, "users", "Tvm3NuKxX0NG77OhxLLMociGvtR2"), {
       userId: "Tvm3NuKxX0NG77OhxLLMociGvtR2",
@@ -44,6 +44,7 @@ const Watchlist = () => {
     });
   };
 
+  // Get user's watchlist
   const getWatchlist = () => {
     getDoc(
       doc(firestoreDatabase, "users", "Tvm3NuKxX0NG77OhxLLMociGvtR2")
@@ -59,7 +60,7 @@ const Watchlist = () => {
     });
   };
 
-  // Edit watchlist value
+  // Edit user's watchlist
   const editWatchlist = () => {
     updateDoc(doc(firestoreDatabase, "users", "Tvm3NuKxX0NG77OhxLLMociGvtR2"), {
       watchlist: ["tether", "bitcoin", "ethereum", "solana"],
@@ -67,24 +68,6 @@ const Watchlist = () => {
   };
 
   // subscribe to firestore changes
-  // React.useEffect(() => {
-  //   const userId = user_store.user.uid;
-  //   console.log("userId: ", userId);
-  //   console.log("userId === : ", userId === "");
-
-  //   if (userId === "") {
-  //     const docRef = doc(firestoreDatabase, "users", userId);
-  //     const docSnap = getDoc(docRef);
-  //     if (docSnap.exists()) {
-  //       console.log("Document data:", docSnap.data());
-  //     } else {
-  //       // doc.data() will be undefined in this case
-  //       console.log("No such document!");
-  //     }
-  //   } else {
-  //     console.log("userId is empty");
-  //   }
-  // }, [user_store.user]);
 
   // Only user who has logged in can create watchlist
   // If user has logged in and watchlist is empty, display create new watchlist
@@ -100,7 +83,7 @@ const Watchlist = () => {
       <p className="tracking-normal text-2xl font-sans font-light text-center pt-12">
         Track prices of 30 cryptocurrencies
       </p>
-      {user_store.user && doc ? (
+      {user_store.user ? (
         <div className="px-48 py-16">
           <button
             type="button"

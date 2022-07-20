@@ -12,25 +12,22 @@ const Login = ({ showLoginModal, setShowLoginModal }) => {
   const [password, setPassword] = React.useState("");
   const { user_store } = useStores();
 
-  const clearInputs = () => {
-    setEmailError("");
-    setPassword("");
-  };
-
   const handleLogin = () => {
     signInWithEmailAndPassword(auth, email, password)
       .then((response) => {
-        // console.log(authentication.currentUser);
+        console.log(authentication.currentUser);
         user_store.setUser(authentication.currentUser);
         setShowLoginModal(!showLoginModal);
+
+        // TODO: Add toast sign in successful
       })
       .catch((error) => {
         console.log(error.code);
         if (error.code === "auth/wrong-password") {
-          // toast.error("Please check the Password");
+          // TODO: Add toast wrong password, please check the password
         }
         if (error.code === "auth/user-not-found") {
-          // toast.error("Please check the Email");
+          // TODO: Add toast user not found, please check the email
         }
       });
   };
