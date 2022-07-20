@@ -126,8 +126,8 @@ const Table = () => {
                         <div
                           className={
                             coin.price_change_percentage_24h < 0
-                              ? "text-red-900"
-                              : "text-green-900"
+                              ? "text-red-500"
+                              : "text-green-500"
                           }
                         >
                           {coin.price_change_percentage_24h}%
