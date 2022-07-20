@@ -4,7 +4,12 @@ import { Transition } from "@headlessui/react";
 import { CheckCircleIcon } from "@heroicons/react/outline";
 import { XIcon } from "@heroicons/react/solid";
 
-const Notification = ({ showNotificationModal, setShowNotificationModal }) => {
+const Notification = ({
+  showNotificationModal,
+  setShowNotificationModal,
+  notificationTitle,
+  notificationDescription,
+}) => {
   return (
     <>
       {/* Global notification live region, render this permanently at the end of the document */}
@@ -35,10 +40,10 @@ const Notification = ({ showNotificationModal, setShowNotificationModal }) => {
                   </div>
                   <div className="ml-3 w-0 flex-1 pt-0.5">
                     <p className="text-sm font-medium text-gray-900">
-                      Successfully saved!
+                      {notificationTitle}
                     </p>
                     <p className="mt-1 text-sm text-gray-500">
-                      Anyone with a link can now view this file.
+                      {notificationDescription}
                     </p>
                   </div>
                   <div className="ml-4 flex-shrink-0 flex">
