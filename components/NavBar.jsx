@@ -11,7 +11,6 @@ import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
 import { auth } from "./helpers/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import dashboard from "../pages/dashboard";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
