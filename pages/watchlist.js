@@ -76,37 +76,11 @@ const Watchlist = () => {
       {watchlist_store.watchlist.length < 1 ? (
         <div className="text-center pt-48">
           <h3 className="mt-1 text-sm text-gray-500">
-            Oh snap, you don't have any coins in your watchlist.
+            Oh snap, you do not have any coins in your watchlist.
           </h3>
         </div>
       ) : (
         <div className="px-4 sm:px-6 lg:px-8 mt-16">
-          {/* <div className=" ml-20 mr-20 relative rounded-md shadow-sm">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="h-6 w-6"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth="2"
-                  d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
-                />
-              </svg>
-            </div>
-            <input
-              type="text"
-              name="coin-search"
-              onChange={handleChange}
-              id="coin-search"
-              className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
-              placeholder="Search for a coin..."
-            />
-          </div> */}
           <div className="mt-16 flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
