@@ -19,9 +19,9 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
         setShowSignUpModal(!showSignUpModal);
       })
       .catch((error) => {
+        console.log(error);
         if (error.code === "auth/email-already-in-use") {
           // Add toast: account already in use
-          console.log("Email Already in Use");
         }
       });
   };

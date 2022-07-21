@@ -8,14 +8,32 @@ import SkeletonLoader from "../components/SkeletonLoader";
 import { auth } from "../components/helpers/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 
+const classNames = (...classes) => {
+  return classes.filter(Boolean).join(" ");
+};
+
 const Watchlist = () => {
   const { watchlist_store, user_store } = useStores();
   const [loader, setLoader] = React.useState(false);
+  const [favoriteList, setFavoriteList] = React.useState([]);
 
-  const onRemoveFavorite = (restaurant) => {
-    const filteredList = watchlist_store.watchlist.filter(
-      (item) => item.id !== restaurant.id
-    );
+  const onFavorite = (coin) => {
+    setFavoriteList([...favoriteList, coin]);
+    watchlist_store.setWatchlist([...watchlist_store.watchlist, coin]);
+
+    if (auth.currentUser !== null) {
+      setDoc(doc(firestoreDatabase, "users", user_store.user.uid), {
+        userId: user_store.user.uid,
+        userEmail: user_store.user.email,
+        watchlist: watchlist_store.watchlist,
+      });
+    }
+  };
+
+  const onRemoveFavorite = (coin) => {
+    const filteredList = favoriteList.filter((item) => item.id !== coin.id);
+    setFavoriteList(filteredList);
+
     watchlist_store.setWatchlist(filteredList);
 
     if (auth.currentUser !== null) {
@@ -27,10 +45,9 @@ const Watchlist = () => {
     }
   };
 
-  const ifExists = (restaurant) => {
+  const ifExists = (coin) => {
     if (
-      watchlist_store.watchlist.filter((item) => item.id === restaurant.id)
-        .length > 0
+      watchlist_store.watchlist.filter((item) => item.id === coin.id).length > 0
     ) {
       return true;
     }
@@ -46,6 +63,7 @@ const Watchlist = () => {
   // Get watchlist from Firestore db
   React.useEffect(() => {
     setLoader(true);
+    setFavoriteList(watchlist_store.watchlist);
     setTimeout(async () => {
       if (auth.currentUser !== null) {
         getDoc(doc(firestoreDatabase, "users", user_store.user.uid)).then(
@@ -53,10 +71,8 @@ const Watchlist = () => {
             if (docSnap.exists()) {
               setLoader(false);
               watchlist_store.setWatchlist(docSnap.data().watchlist);
-              console.log("Document exists!");
             } else {
               setLoader(false);
-              console.log("No such document!");
             }
           }
         );
@@ -73,13 +89,7 @@ const Watchlist = () => {
       <p className="tracking-normal text-lg sm:text-xl md:text-2xl lg:text-3xl font-sans font-normal text-center pt-10">
         Track prices of 50 cryptocurrencies
       </p>
-      {watchlist_store.watchlist.length < 1 ? (
-        <div className="text-center pt-48">
-          <h3 className="mt-1 text-sm text-gray-500">
-            Oh snap, you do not have any coins in your watchlist.
-          </h3>
-        </div>
-      ) : (
+      {watchlist_store.watchlist.length > 0 ? (
         <div className="px-4 sm:px-6 lg:px-8 mt-16">
           <div className="mt-16 flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
@@ -112,7 +122,19 @@ const Watchlist = () => {
                           scope="col"
                           className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
                         >
+                          1h
+                        </th>
+                        <th
+                          scope="col"
+                          className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
+                        >
                           24h
+                        </th>
+                        <th
+                          scope="col"
+                          className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
+                        >
+                          7d
                         </th>
                         <th
                           scope="col"
@@ -134,9 +156,27 @@ const Watchlist = () => {
                       ) : (
                         watchlist_store.watchlist.map((coin) => (
                           <tr key={coin.symbol}>
-                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                            {/* <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                               <button onClick={() => onRemoveFavorite(coin)}>
                                 <StarIcon className="text-yellow-400 h-5 w-5" />
+                              </button>
+                            </td> */}
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                              <button
+                                onClick={() =>
+                                  ifExists(coin)
+                                    ? onRemoveFavorite(coin)
+                                    : onFavorite(coin)
+                                }
+                              >
+                                <StarIcon
+                                  className={classNames(
+                                    ifExists(coin)
+                                      ? "text-yellow-400"
+                                      : "text-gray-400",
+                                    "h-5 w-5"
+                                  )}
+                                />
                               </button>
                             </td>
                             <td className="whitespace-nowrap py-4 px-3 text-sm sm:pl-6">
@@ -162,28 +202,62 @@ const Watchlist = () => {
                             </td>
                             <td className="whitespace-nowrap px-3 py-4 text-left text-sm text-gray-500">
                               <div className="text-gray-900">
-                                ${coin.current_price}
+                                ${coin.current_price.toLocaleString()}
                               </div>
                             </td>
                             <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
                               <div
                                 className={
-                                  coin.price_change_percentage_24h < 0
+                                  coin.price_change_percentage_1h_in_currency <
+                                  0
                                     ? "text-red-500"
                                     : "text-green-500"
                                 }
                               >
-                                {coin.price_change_percentage_24h}%
+                                {coin.price_change_percentage_1h_in_currency.toFixed(
+                                  2
+                                )}
+                                %
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+                              <div
+                                className={
+                                  coin.price_change_percentage_24h_in_currency <
+                                  0
+                                    ? "text-red-500"
+                                    : "text-green-500"
+                                }
+                              >
+                                {coin.price_change_percentage_24h_in_currency.toFixed(
+                                  2
+                                )}
+                                %
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+                              <div
+                                className={
+                                  coin.price_change_percentage_7d_in_currencyy <
+                                  0
+                                    ? "text-red-500"
+                                    : "text-green-500"
+                                }
+                              >
+                                {coin.price_change_percentage_7d_in_currency.toFixed(
+                                  2
+                                )}
+                                %
                               </div>
                             </td>
                             <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
                               <div className="text-gray-900">
-                                {coin.total_volume}
+                                {coin.total_volume.toLocaleString()}
                               </div>
                             </td>
                             <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
                               <div className="text-gray-900">
-                                {coin.market_cap}
+                                {coin.total_volume.toLocaleString()}
                               </div>
                             </td>
                           </tr>
@@ -195,6 +269,12 @@ const Watchlist = () => {
               </div>
             </div>
           </div>
+        </div>
+      ) : (
+        <div className="text-center pt-48">
+          <h3 className="mt-1 text-sm text-gray-500">
+            Oh snap, you do not have any coins in your watchlist.
+          </h3>
         </div>
       )}
     </>

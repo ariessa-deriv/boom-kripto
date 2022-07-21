@@ -5,6 +5,7 @@ import { auth } from "../components/helpers/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
+import Head from "next/head";
 
 function MyApp({ Component, pageProps }) {
   const { user_store } = useStores();
@@ -17,6 +18,10 @@ function MyApp({ Component, pageProps }) {
 
   return (
     <>
+      <Head>
+        <title>BoomKripto | Track prices of 50 cryptocurrencies</title>
+        <meta name="viewport" content="initial-scale=1.0, width=device-width" />
+      </Head>
       <NavBar />
       <Component {...pageProps} />
     </>

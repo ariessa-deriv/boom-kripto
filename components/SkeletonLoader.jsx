@@ -28,6 +28,12 @@ const SkeletonLoader = () => {
           <div className="flex-end bg-gray-300 h-6 rounded-md "></div>
         </td>
         <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+          <div className="flex-end bg-gray-300 h-6 rounded-md "></div>
+        </td>
+        <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+          <div className="flex-end bg-gray-300 h-6 rounded-md "></div>
+        </td>
+        <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
           <div className="flex bg-gray-300 h-6 rounded-md "></div>
         </td>
         <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
