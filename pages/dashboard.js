@@ -69,7 +69,25 @@ const Dashboard = () => {
 
   React.useEffect(() => {
     setLoader(true);
-    setFavoriteList(watchlist_store.watchlist);
+
+    // If user is logged in, get watchlist from Firestore database
+    if (auth.currentUser !== null) {
+      getDoc(doc(firestoreDatabase, "users", user_store.user.uid)).then(
+        (docSnap) => {
+          if (docSnap.exists()) {
+            // console.log("Document data:", docSnap.data());
+            // console.log("Watchlist: ", docSnap.data().watchlist);
+            watchlist_store.setWatchlist(docSnap.data().watchlist);
+            setFavoriteList(watchlist_store.watchlist);
+          } else {
+            // console.log("No such document!");
+          }
+        }
+      );
+    } else {
+      setFavoriteList(watchlist_store.watchlist);
+    }
+
     setTimeout(async () => {
       axios
         .get(
