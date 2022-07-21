@@ -74,7 +74,8 @@ const Dashboard = () => {
       axios
         .get(
           "https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=" +
-            coinslist
+            coinslist +
+            "&price_change_percentage=1h,24h,7d"
         )
         .then((res) => {
           setLoader(false);
@@ -150,7 +151,19 @@ const Dashboard = () => {
                         scope="col"
                         className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
                       >
+                        1h
+                      </th>
+                      <th
+                        scope="col"
+                        className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
+                      >
                         24h
+                      </th>
+                      <th
+                        scope="col"
+                        className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
+                      >
+                        7d
                       </th>
                       <th
                         scope="col"
@@ -219,12 +232,43 @@ const Dashboard = () => {
                           <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
                             <div
                               className={
-                                coin.price_change_percentage_24h < 0
+                                coin.price_change_percentage_1h_in_currency < 0
                                   ? "text-red-500"
                                   : "text-green-500"
                               }
                             >
-                              {coin.price_change_percentage_24h.toFixed(2)}%
+                              {coin.price_change_percentage_1h_in_currency.toFixed(
+                                2
+                              )}
+                              %
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+                            <div
+                              className={
+                                coin.price_change_percentage_24h_in_currency < 0
+                                  ? "text-red-500"
+                                  : "text-green-500"
+                              }
+                            >
+                              {coin.price_change_percentage_24h_in_currency.toFixed(
+                                2
+                              )}
+                              %
+                            </div>
+                          </td>
+                          <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+                            <div
+                              className={
+                                coin.price_change_percentage_7d_in_currencyy < 0
+                                  ? "text-red-500"
+                                  : "text-green-500"
+                              }
+                            >
+                              {coin.price_change_percentage_7d_in_currency.toFixed(
+                                2
+                              )}
+                              %
                             </div>
                           </td>
                           <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
