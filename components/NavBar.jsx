@@ -11,7 +11,7 @@ import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
 import { auth } from "./helpers/firebaseConfig";
 import { onAuthStateChanged } from "firebase/auth";
-import { XCircleIcon } from "@heroicons/react/solid";
+import dashboard from "../pages/dashboard";
 
 const navigation = [
   { name: "Dashboard", href: "/dashboard", current: true },
@@ -41,20 +41,23 @@ const NavBar = () => {
   const handleLogout = () => {
     signOut(auth)
       .then((response) => {
+        console.log("auth user", auth.currentUser);
         user_store.setUser(auth.currentUser);
+        console.log("user store", user_store.user);
         setNotificationTitle("Successfully logged out!");
         setNotificationDescription("You are now logged out.");
         setNotificationType("message");
         setShowNotificationModal(true);
       })
       .catch((error) => {});
+    console.log("user", user_store.user);
   };
 
   React.useEffect(() => {
     onAuthStateChanged(auth, (user) => {
       user_store.setUser(user);
     });
-  }, [auth.currentUser]);
+  }, [user_store.user]);
 
   React.useEffect(() => {
     if (user_store.authenticationState == "login") {

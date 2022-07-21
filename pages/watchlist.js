@@ -1,104 +1,87 @@
 import React from "react";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
-import { PlusIcon } from "@heroicons/react/outline";
-import {
-  getFirestore,
-  query,
-  orderBy,
-  onSnapshot,
-  collection,
-  getDoc,
-  getDocs,
-  setDoc,
-  addDoc,
-  updateDoc,
-  doc,
-  serverTimestamp,
-  arrayUnion,
-} from "firebase/firestore";
+import { PlusIcon, StarIcon } from "@heroicons/react/solid";
+import { getDoc, setDoc, doc } from "firebase/firestore";
 import { firestoreDatabase } from "../components/helpers/firebaseConfig";
+import SkeletonLoader from "../components/SkeletonLoader";
+import { auth } from "../components/helpers/firebaseConfig";
+import { onAuthStateChanged } from "firebase/auth";
 
 const Watchlist = () => {
-  const { coin_store, watchlist_store, user_store } = useStores();
+  const { watchlist_store, user_store } = useStores();
+  const [loader, setLoader] = React.useState(false);
 
-  const [search, setSearch] = React.useState("");
+  const onRemoveFavorite = (restaurant) => {
+    const filteredList = watchlist_store.watchlist.filter(
+      (item) => item.id !== restaurant.id
+    );
+    watchlist_store.setWatchlist(filteredList);
 
-  const handleChange = (e) => {
-    setSearch(e.target.value);
+    if (auth.currentUser !== null) {
+      setDoc(doc(firestoreDatabase, "users", user_store.user.uid), {
+        userId: user_store.user.uid,
+        userEmail: user_store.user.email,
+        watchlist: watchlist_store.watchlist,
+      });
+    }
   };
 
-  const filteredCoins = coin_store.coins.filter((coin) =>
-    coin.name.toLowerCase().includes(search.toLowerCase())
-  );
+  const ifExists = (restaurant) => {
+    if (
+      watchlist_store.watchlist.filter((item) => item.id === restaurant.id)
+        .length > 0
+    ) {
+      return true;
+    }
+    return false;
+  };
 
-  // Create new watchlist
-  const createWatchlist = () => {
-    const userId = user_store.user.uid;
-    const userEmail = user_store.user.email;
-
-    setDoc(doc(firestoreDatabase, "users", "Tvm3NuKxX0NG77OhxLLMociGvtR2"), {
-      userId: "Tvm3NuKxX0NG77OhxLLMociGvtR2",
-      userEmail: "ariessa@gmail.com",
-      watchlist: ["bitcoin", "ethereum", "solana"],
+  React.useEffect(() => {
+    onAuthStateChanged(auth, (user) => {
+      user_store.setUser(user);
     });
-  };
+  }, [auth.currentUser]);
 
-  // Get user's watchlist
-  const getWatchlist = () => {
-    getDoc(
-      doc(firestoreDatabase, "users", "Tvm3NuKxX0NG77OhxLLMociGvtR2")
-    ).then((docSnap) => {
-      if (docSnap.exists()) {
-        console.log("Document data:", docSnap.data());
-        console.log("watchlist: ", docSnap.data().watchlist);
-        watchlist_store.setWatchlist(docSnap.data().watchlist);
-        console.log("watchlist store: ", watchlist_store.watchlist);
-      } else {
-        console.log("No such document!");
+  // Get watchlist from Firestore db
+  React.useEffect(() => {
+    setLoader(true);
+    setTimeout(async () => {
+      if (auth.currentUser !== null) {
+        getDoc(doc(firestoreDatabase, "users", user_store.user.uid)).then(
+          (docSnap) => {
+            if (docSnap.exists()) {
+              setLoader(false);
+              watchlist_store.setWatchlist(docSnap.data().watchlist);
+              console.log("Document exists!");
+            } else {
+              setLoader(false);
+              console.log("No such document!");
+            }
+          }
+        );
       }
-    });
-  };
-
-  // Edit user's watchlist
-  const editWatchlist = () => {
-    updateDoc(doc(firestoreDatabase, "users", "Tvm3NuKxX0NG77OhxLLMociGvtR2"), {
-      watchlist: ["tether", "bitcoin", "ethereum", "solana"],
-    });
-  };
-
-  // subscribe to firestore changes
-
-  // Only user who has logged in can create watchlist
-  // If user has logged in and watchlist is empty, display create new watchlist
-  // Else, display current watchlist
-
-  // Add remove column in current watchlist
+      setLoader(false);
+    }, 1000);
+  }, [watchlist_store.watchlist]);
 
   return (
     <>
-      <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 font-sans text-8xl font-extrabold text-center pt-24">
+      <p className="text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-600 font-sans text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-extrabold text-center pt-24">
         Watchlist
       </p>
-      <p className="tracking-normal text-2xl font-sans font-light text-center pt-12">
-        Track prices of 30 cryptocurrencies
+      <p className="tracking-normal text-lg sm:text-xl md:text-2xl lg:text-3xl font-sans font-normal text-center pt-10">
+        Track prices of 50 cryptocurrencies
       </p>
-      {user_store.user ? (
-        <div className="px-48 py-16">
-          <button
-            type="button"
-            className="relative block w-full border-2 border-gray-300 border-dashed rounded-lg p-12 text-center hover:border-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-            onClick={() => getWatchlist()}
-          >
-            <PlusIcon className="h-10 w-10 text-gray-400 mx-auto" />
-            <span className="mt-2 block text-sm font-medium text-gray-900">
-              Create a new watchlist
-            </span>
-          </button>
+      {watchlist_store.watchlist.length < 1 ? (
+        <div className="text-center pt-48">
+          <h3 className="mt-1 text-sm text-gray-500">
+            Oh snap, you don't have any coins in your watchlist.
+          </h3>
         </div>
       ) : (
         <div className="px-4 sm:px-6 lg:px-8 mt-16">
-          <div className=" ml-20 mr-20 relative rounded-md shadow-sm">
+          {/* <div className=" ml-20 mr-20 relative rounded-md shadow-sm">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -123,7 +106,7 @@ const Watchlist = () => {
               className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
               placeholder="Search for a coin..."
             />
-          </div>
+          </div> */}
           <div className="mt-16 flex flex-col">
             <div className="-my-2 -mx-4 overflow-x-auto sm:-mx-6 lg:-mx-8">
               <div className="inline-block min-w-full py-2 align-middle md:px-6 lg:px-8">
@@ -134,12 +117,16 @@ const Watchlist = () => {
                         <th
                           scope="col"
                           className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                        ></th>
+                        <th
+                          scope="col"
+                          className="py-3.5 px-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                         >
                           Name
                         </th>
                         <th
                           scope="col"
-                          className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-6"
+                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900 sm:pl-6"
                         ></th>
                         <th
                           scope="col"
@@ -149,79 +136,85 @@ const Watchlist = () => {
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
                         >
                           24h
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
                         >
                           Total Volume
                         </th>
                         <th
                           scope="col"
-                          className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                          className="pl-3 pr-4 sm:pr-6 py-3.5 text-right text-sm font-semibold text-gray-900"
                         >
                           Market Cap
                         </th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gray-200 bg-white">
-                      {filteredCoins.map((coin) => (
-                        <tr key={coin.symbol}>
-                          {/* <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                        <StarIcon className="h-5 w-5 text-gray-500" />
-                      </td> */}
-                          <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                            <div className="flex items-center">
-                              <div className="h-8 w-8 flex-shrink-0">
-                                <img
-                                  className="h-8 w-8 rounded-full"
-                                  src={coin.image}
-                                  alt=""
-                                />
-                              </div>
-                              <div className="ml-4">
-                                <div className="font-medium text-gray-900">
-                                  {coin.name}
+                      {loader ? (
+                        <SkeletonLoader />
+                      ) : (
+                        watchlist_store.watchlist.map((coin) => (
+                          <tr key={coin.symbol}>
+                            <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
+                              <button onClick={() => onRemoveFavorite(coin)}>
+                                <StarIcon className="text-yellow-400 h-5 w-5" />
+                              </button>
+                            </td>
+                            <td className="whitespace-nowrap py-4 px-3 text-sm sm:pl-6">
+                              <div className="flex items-center">
+                                <div className="h-8 w-8 flex-shrink-0">
+                                  <img
+                                    className="h-8 w-8 rounded-full"
+                                    src={coin.image}
+                                    alt=""
+                                  />
+                                </div>
+                                <div className="ml-4">
+                                  <div className="font-medium text-gray-900">
+                                    {coin.name}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <div className="text-gray-900 uppercase">
-                              {coin.symbol}
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <div className="text-gray-900">
-                              ${coin.current_price}
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <div
-                              className={
-                                coin.price_change_percentage_24h < 0
-                                  ? "text-red-900"
-                                  : "text-green-900"
-                              }
-                            >
-                              {coin.price_change_percentage_24h}%
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <div className="text-gray-900">
-                              {coin.total_volume}
-                            </div>
-                          </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                            <div className="text-gray-900">
-                              {coin.market_cap}
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                              <div className="text-gray-900 uppercase">
+                                {coin.symbol}
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap px-3 py-4 text-left text-sm text-gray-500">
+                              <div className="text-gray-900">
+                                ${coin.current_price}
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+                              <div
+                                className={
+                                  coin.price_change_percentage_24h < 0
+                                    ? "text-red-500"
+                                    : "text-green-500"
+                                }
+                              >
+                                {coin.price_change_percentage_24h}%
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+                              <div className="text-gray-900">
+                                {coin.total_volume}
+                              </div>
+                            </td>
+                            <td className="whitespace-nowrap pl-3 pr-4 sm:pr-6 py-4 text-right text-sm text-gray-500">
+                              <div className="text-gray-900">
+                                {coin.market_cap}
+                              </div>
+                            </td>
+                          </tr>
+                        ))
+                      )}
                     </tbody>
                   </table>
                 </div>

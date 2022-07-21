@@ -1,10 +1,9 @@
 import React, { Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { XIcon } from "@heroicons/react/outline";
-import { getAuth, signInWithEmailAndPassword } from "firebase/auth";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
-import { firebaseApp } from "./helpers/firebaseConfig";
 import { auth } from "./helpers/firebaseConfig";
 
 const Login = ({ showLoginModal, setShowLoginModal }) => {
