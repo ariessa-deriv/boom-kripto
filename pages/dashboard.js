@@ -68,8 +68,24 @@ const Dashboard = () => {
     "bitcoin,ethereum,tether,usd-coin,binancecoin,binance-usd,ripple,cardano,solana,dogecoin,polkadot,matic-network,defichain,dai,avalanche-2,tron,staked-ether,wrapped-bitcoin,leo-token,litecoin,ftx-token,okb,uniswap,crypto-com-chain,chainlink,ethereum-classic,near,stellar,cosmos,monero,algorand,bitcoin-cash,flow,vechain,chain-2,apecoin,theta-fuel,internet-computer,the-sandbox,decentraland,hedera-hashgraph,tezos,filecoin,quant-network,axie-infinity,frax,elrond-erd-2,aave,theta-token,true-usd";
 
   React.useEffect(() => {
+    // If user is logged in, get watchlist from Firestore database
+    if (auth.currentUser !== null) {
+      getDoc(doc(firestoreDatabase, "users", user_store.user.uid)).then(
+        (docSnap) => {
+          if (docSnap.exists()) {
+            watchlist_store.setWatchlist(docSnap.data().watchlist);
+            setFavoriteList(watchlist_store.watchlist);
+          }
+        }
+      );
+    } else {
+      setFavoriteList(watchlist_store.watchlist);
+    }
+  }, [auth.currentUser]);
+
+  React.useEffect(() => {
     setLoader(true);
-    setFavoriteList(watchlist_store.watchlist);
+
     setTimeout(async () => {
       axios
         .get(
