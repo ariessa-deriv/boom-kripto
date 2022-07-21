@@ -132,7 +132,7 @@ const Dashboard = () => {
             name="coin-search"
             onChange={handleChange}
             id="coin-search"
-            className="focus:ring-indigo-500 focus:border-indigo-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
+            className="focus:ring-purple-500 focus:border-purple-500 block w-full pl-10 sm:text-sm border-gray-300 rounded-md"
             placeholder="Search for a coin..."
           />
         </div>
