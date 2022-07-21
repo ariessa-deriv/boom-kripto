@@ -81,7 +81,7 @@ const Dashboard = () => {
           setLoader(false);
           coin_store.setCoins(res.data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {});
     }, 1000);
   }, []);
 
@@ -219,7 +219,7 @@ const Dashboard = () => {
                               </div>
                             </div>
                           </td>
-                          <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                          <td className="whitespace-nowrap px-3 py-4 text-xs text-gray-500">
                             <div className="text-gray-900 uppercase">
                               {coin.symbol}
                             </div>

@@ -1,7 +1,7 @@
 import React from "react";
 import { useStores } from "../stores";
 import { observer } from "mobx-react-lite";
-import { PlusIcon, StarIcon } from "@heroicons/react/solid";
+import { StarIcon } from "@heroicons/react/solid";
 import { getDoc, setDoc, doc } from "firebase/firestore";
 import { firestoreDatabase } from "../components/helpers/firebaseConfig";
 import SkeletonLoader from "../components/SkeletonLoader";
@@ -60,7 +60,7 @@ const Watchlist = () => {
     });
   }, [auth.currentUser]);
 
-  // Get watchlist from Firestore db
+  // Get watchlist from Firestore database
   React.useEffect(() => {
     setLoader(true);
     setFavoriteList(watchlist_store.watchlist);
@@ -156,11 +156,6 @@ const Watchlist = () => {
                       ) : (
                         watchlist_store.watchlist.map((coin) => (
                           <tr key={coin.symbol}>
-                            {/* <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
-                              <button onClick={() => onRemoveFavorite(coin)}>
-                                <StarIcon className="text-yellow-400 h-5 w-5" />
-                              </button>
-                            </td> */}
                             <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm sm:pl-6">
                               <button
                                 onClick={() =>
@@ -195,7 +190,7 @@ const Watchlist = () => {
                                 </div>
                               </div>
                             </td>
-                            <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                            <td className="whitespace-nowrap px-3 py-4 text-xs text-gray-500">
                               <div className="text-gray-900 uppercase">
                                 {coin.symbol}
                               </div>

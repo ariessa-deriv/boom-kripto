@@ -1,4 +1,4 @@
-import { Fragment, useState } from "react";
+import { Fragment } from "react";
 import { Transition } from "@headlessui/react";
 import { CheckCircleIcon, ExclamationIcon } from "@heroicons/react/outline";
 import { XIcon } from "@heroicons/react/solid";
@@ -12,13 +12,11 @@ const Notification = ({
 }) => {
   return (
     <>
-      {/* Global notification live region, render this permanently at the end of the document */}
       <div
         aria-live="assertive"
         className="fixed inset-0 flex items-end px-4 py-6 pointer-events-none sm:p-6 sm:items-start"
       >
         <div className="w-full flex flex-col items-center space-y-4 sm:items-end">
-          {/* Notification panel, dynamically insert this into the live region when it needs to be displayed */}
           <Transition
             show={showNotificationModal}
             as={Fragment}
