@@ -40,16 +40,13 @@ const NavBar = () => {
   const handleLogout = () => {
     signOut(auth)
       .then((response) => {
-        console.log("auth user", auth.currentUser);
         user_store.setUser(auth.currentUser);
-        console.log("user store", user_store.user);
         setNotificationTitle("Successfully logged out!");
         setNotificationDescription("You are now logged out.");
         setNotificationType("message");
         setShowNotificationModal(true);
       })
       .catch((error) => {});
-    console.log("user", user_store.user);
   };
 
   React.useEffect(() => {

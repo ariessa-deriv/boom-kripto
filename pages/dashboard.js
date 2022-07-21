@@ -81,7 +81,7 @@ const Dashboard = () => {
           setLoader(false);
           coin_store.setCoins(res.data);
         })
-        .catch((error) => console.log(error));
+        .catch((error) => {});
     }, 1000);
   }, []);
 

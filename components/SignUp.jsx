@@ -18,12 +18,7 @@ const SignUp = ({ showSignUpModal, setShowSignUpModal }) => {
         user_store.setAuthenticationState("signup");
         setShowSignUpModal(!showSignUpModal);
       })
-      .catch((error) => {
-        console.log(error);
-        if (error.code === "auth/email-already-in-use") {
-          // Add toast: account already in use
-        }
-      });
+      .catch((error) => {});
   };
 
   return (
